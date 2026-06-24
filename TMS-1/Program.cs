@@ -1,13 +1,12 @@
 ﻿Console.WriteLine("Hello this is Rock Paper Scissors");
 Console.WriteLine("Enter your step");
+Console.WriteLine("Enter your step");
 
 
 var userWon = false;
 
 while (userWon == false)
 {
-    Console.Clear();
-    
     Console.WriteLine("1 - Rock");
     Console.WriteLine("2 - Paper");
     Console.WriteLine("3 - Scissors");
