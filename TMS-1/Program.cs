@@ -1,5 +1,6 @@
 ﻿Console.WriteLine("Hello this is Rock Paper Scissors");
 Console.WriteLine("Enter your step");
+Console.WriteLine("Enter your step");
 
 
 var userWon = false;
