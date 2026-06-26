@@ -110,6 +110,21 @@
             Console.WriteLine($"Draws: {draws}");
             Console.WriteLine("--------------------");
             gamesCounter++;
+            
+            int remainingRounds = roundCount - gamesCounter;
+            if (userWins > computerWins + remainingRounds)
+            {
+                Console.WriteLine("You are already the winner!");
+                break;
+            }
+
+            if (computerWins > userWins + remainingRounds)
+            {
+                Console.WriteLine("Computer is already the winner!");
+                break;
+            }
+            
+            
         }
 
         Console.WriteLine("Game over");
