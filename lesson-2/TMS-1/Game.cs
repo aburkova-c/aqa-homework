@@ -39,6 +39,7 @@
             Console.WriteLine("1 - Rock");
             Console.WriteLine("2 - Paper");
             Console.WriteLine("3 - Scissors");
+            Console.WriteLine("4 - Kolodec");
             Console.WriteLine("0 - Exit");
 
             var userInput = Console.ReadLine();
@@ -46,7 +47,7 @@
             int userChoice;
 
             if (!int.TryParse(userInput, out userChoice) ||
-                userChoice < 0 || userChoice > 3)
+                userChoice < 0 || userChoice > 4)
             {
                 Console.WriteLine("Invalid input, please try again");
                 continue;
@@ -57,13 +58,15 @@
                 return;
             }
 
-            var computerChoice = random.Next(1, 4);
+            var computerChoice = random.Next(1, 5);
 
             string userChoiceString = userChoice switch
             {
                 1 => "Rock",
                 2 => "Paper",
-                _ => "Scissors"
+                3 => "Scissors",
+                _ => "Kolodec"
+                
             };
 
             Console.WriteLine($"You chose {userChoiceString}");
@@ -72,7 +75,8 @@
             {
                 1 => "Rock",
                 2 => "Paper",
-                _ => "Scissors"
+                3 => "Scissors",
+                _ => "Kolodec"
             };
 
             Console.WriteLine($"Computer chose {computerChoiceString}");
@@ -83,9 +87,12 @@
                 draws++;
             }
             else if (
-                (userChoice == 1 && computerChoice == 3) ||
-                (userChoice == 2 && computerChoice == 1) ||
-                (userChoice == 3 && computerChoice == 2)
+                (userChoice == 1 && computerChoice == 3) ||  // Rock beats Scissors
+                (userChoice == 2 && computerChoice == 1) ||  // Paper beats Rock
+                (userChoice == 2 && computerChoice == 4) ||  // Paper beats Kolodec
+                (userChoice == 3 && computerChoice == 2) ||  // Scissors beats Paper
+                (userChoice == 4 && computerChoice == 3) ||  // Kolodec beats Scissors
+                (userChoice == 4 && computerChoice == 1)     // Kolodec beats Rock
             )
             {
                 Console.WriteLine("You win");
