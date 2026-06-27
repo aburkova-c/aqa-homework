@@ -24,8 +24,8 @@ class Game
 
     public void Play()
     {
-        Console.WriteLine("Hello this is Rock Paper Scissors");
-        Console.WriteLine("Enter your step");
+        Console.WriteLine("This is Rock Paper Scissors.");
+        Console.WriteLine("Enter your step:");
 
         UserWon = false;
 
@@ -88,7 +88,6 @@ class Game
             else if (userChoice == 1 && computerChoice == 3 || userChoice == 2 && computerChoice == 1 ||
                      userChoice == 3 && computerChoice == 2)
             {
-                Console.WriteLine("You win");
                 UserWon = true;
             }
         } while (_roundsPlayed < RoundsToPlay);
