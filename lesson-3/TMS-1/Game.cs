@@ -38,58 +38,38 @@ class Game
 
             _roundsPlayed++;
 
-            var userInput = Console.ReadLine(); // "5"
+            var playerMove = new Move();
+            playerMove.ReadFromConsole();
 
-            int userChoice; // there is no value
-
-            // parse user input = string into int 
-            // put result to out result param
-            // return if parse was successful
-
-            if (!int.TryParse(userInput, out userChoice) || !(userChoice >= 0 && userChoice <= 3))
-            {
-                Console.WriteLine(userChoice);
-                Console.WriteLine("Invalid input");
-                continue;
-            }
-
-            if (userChoice == 0)
+            if (playerMove.Number == 0)
             {
                 return;
             }
 
-            var random = new Random();
-            var computerChoice = random.Next(1, 4); // generate random number 1-3
-
-            string userChoiceString;
-            switch (userChoice)
+            if (!playerMove.IsValid())
             {
-                case 1:
-                    Console.WriteLine("Rock");
-                    userChoiceString = "Rock";
-                    break;
-                case 2:
-                    userChoiceString = "Paper";
-                    break;
-                default:
-                    userChoiceString = "Scissors";
-                    break;
+                Console.WriteLine($"Invalid move: {playerMove}");
+                continue;
             }
 
-            Console.WriteLine($"You chose {userChoiceString}");
 
-            string computerChoiceString = computerChoice switch { 1 => "Rock", 2 => "Paper", _ => "Scissors" };
 
-            Console.WriteLine($"Computer chose {computerChoiceString}");
+            var computerMove = new Move();
+            computerMove.GenerateRandom();
+            Console.WriteLine($"You chose: {playerMove.Name}");
+            Console.WriteLine($"Computer chose: {computerMove.Name}");
 
-            if (computerChoice == userChoice)
+            if (computerMove.Number == playerMove.Number)
             {
             }
-            else if (userChoice == 1 && computerChoice == 3 || userChoice == 2 && computerChoice == 1 ||
-                     userChoice == 3 && computerChoice == 2)
+            else if (playerMove.Number == 1 && computerMove.Number == 3 ||
+                     playerMove.Number == 2 && computerMove.Number == 1 ||
+                     playerMove.Number == 3 && computerMove.Number == 2)
             {
                 UserWon = true;
             }
         } while (_roundsPlayed < RoundsToPlay);
     }
 }
+
+//  В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move.
