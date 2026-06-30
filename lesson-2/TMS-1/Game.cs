@@ -1,5 +1,7 @@
 ﻿class Game
 {
+    //Общий фидбек: все супер!
+        
     public void Start()
     {
         Console.WriteLine("Hello! this is Rock Paper Scissors.");
@@ -7,6 +9,8 @@
 
         var roundCount = 0;
 
+        // Хорошо, но лушче избегать while(true), а стараться описывать условие выхода
+        // Например, раз мы спрашиваем пока число нам не нравится, мы можем делать условие while(roundCount < 1 || roundCount > 10) и тогда не нужен будет этот break; вконце
         while (true)
         {
             Console.WriteLine("Enter number of rounds (1-10)");
@@ -23,6 +27,7 @@
             break;
         }
 
+        //Лушче писать это прямо перед считыванием шага
         Console.WriteLine("Enter your step");
 
         int gamesCounter = 0;
@@ -44,6 +49,7 @@
 
             var userInput = Console.ReadLine();
 
+            // можно было объявить прямо в out параметре: int.TryParse(userInput, out var userChoice)
             int userChoice;
 
             if (!int.TryParse(userInput, out userChoice) ||
