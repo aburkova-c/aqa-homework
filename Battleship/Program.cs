@@ -6,7 +6,7 @@ class Program
         
         var ship = new Ship(shipPosition, 2);
         
-        var board = new Board(5, 5, ship);
+        var board = new Board(10, 10, ship);
 
         var game = new Game();
         
