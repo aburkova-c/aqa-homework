@@ -39,33 +39,34 @@ class Game
 
             _roundsPlayed++;
 
-            var userMove = new Move();
-            userMove.ReadFromConsole();
+            var playerMove = new Move();
+            playerMove.ReadFromConsole();
 
-            if (userMove.Number == 0)
+            if (playerMove.Number == 0)
             {
                 return;
             }
 
-            if (!userMove.IsValid())
+            if (!playerMove.IsValid())
             {
-                Console.WriteLine("Invalid input");
+                Console.WriteLine($"Invalid move: {playerMove}");
                 continue;
             }
 
+
+
             var computerMove = new Move();
             computerMove.GenerateRandom();
+            Console.WriteLine($"You chose: {playerMove.Name}");
+            Console.WriteLine($"Computer chose: {computerMove.Name}");
 
-            Console.WriteLine($"You chose {userMove.Name}");
-            Console.WriteLine($"Computer chose {computerMove.Name}");
-
-            if (computerMove.Number == userMove.Number)
+            if (computerMove.Number == playerMove.Number)
             {
                 Console.WriteLine("Draw!");
             }
-            else if (userMove.Number == 1 && computerMove.Number == 3 ||
-                     userMove.Number == 2 && computerMove.Number == 1 ||
-                     userMove.Number == 3 && computerMove.Number == 2)
+            else if (playerMove.Number == 1 && computerMove.Number == 3 ||
+                     playerMove.Number == 2 && computerMove.Number == 1 ||
+                     playerMove.Number == 3 && computerMove.Number == 2)
             {
                 UserWon = true;
                 Console.WriteLine("You won this round!");
@@ -80,3 +81,5 @@ class Game
         } while (_roundsPlayed < RoundsToPlay);
     }
 }
+
+//  В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move.
