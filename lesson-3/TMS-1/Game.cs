@@ -28,6 +28,7 @@ class Game
         Console.WriteLine("Enter your step:");
 
         UserWon = false;
+        ComputerWon = false;
 
         do
         {
@@ -61,13 +62,22 @@ class Game
 
             if (computerMove.Number == playerMove.Number)
             {
+                Console.WriteLine("Draw!");
             }
             else if (playerMove.Number == 1 && computerMove.Number == 3 ||
                      playerMove.Number == 2 && computerMove.Number == 1 ||
                      playerMove.Number == 3 && computerMove.Number == 2)
             {
                 UserWon = true;
+                Console.WriteLine("You won this round!");
             }
+
+            else
+            {
+                ComputerWon = true;
+                Console.WriteLine("Computer won  this round!");
+            }
+
         } while (_roundsPlayed < RoundsToPlay);
     }
 }
