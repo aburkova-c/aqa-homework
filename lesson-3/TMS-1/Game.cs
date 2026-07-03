@@ -2,9 +2,18 @@
 
 class Game
 {
-    private int _roundsPlayed = 0;
+    private Player _player;
+    private Player _computer;
     private int _roundsToPlay;
+    private int _roundsPlayed;
 
+    public Game(Player player, Player computer, int roundsToPlay)
+    {
+        _player = player;
+        _computer = computer;
+        _roundsToPlay =  roundsToPlay;
+    }
+    
     public int RoundsToPlay
     {
         get { return _roundsToPlay; }
@@ -72,4 +81,5 @@ class Game
     }
 }
 
-//  В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move.
+//  3. В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move
+// 4.1 Game — игроков и количество раундов

@@ -2,9 +2,15 @@
 
 public class GameResult
 {
-    public Move PlayerMove { get; set; }
-    public Move ComputerMove { get; set; }
-    public string ResultText { get; set; } = string.Empty;
+    public GameResult(Move playerMove, Move computerMove, string resultText)
+    {
+        PlayerMove = playerMove;
+        ComputerMove = computerMove;
+        ResultText = resultText;
+    }
+    public Move PlayerMove { get; private set; }
+    public Move ComputerMove { get; private set; }
+    public string ResultText { get; private set; } = string.Empty;
 
     public void Print()
     {
@@ -14,5 +20,6 @@ public class GameResult
     }
 }
 
-// Описать класс результата раунда GameResult со свойствами для хода игрока, хода компьютера и текста результата.
+// 3.4. Описать класс результата раунда GameResult со свойствами для хода игрока, хода компьютера и текста результата.
 // Добавить метод Print(), выводящий информацию о раунде.
+// 4.1 1. Добавить конструкторы: GameResult — объекты ходов игрока и компьютера и текст результата, 
