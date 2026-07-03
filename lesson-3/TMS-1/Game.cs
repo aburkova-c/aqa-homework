@@ -45,7 +45,7 @@ class Game
             Console.WriteLine("3 - Scissors");
             Console.WriteLine("0 - Exit");
 
-            _roundsPlayed++;
+
 
             var playerMove = new Move();
             playerMove.ReadFromConsole();
@@ -57,11 +57,10 @@ class Game
 
             if (!playerMove.IsValid())
             {
-                Console.WriteLine($"Invalid move: {playerMove}");
+                Console.WriteLine($"Invalid move: {playerMove.Number}");
                 continue;
             }
-
-
+            _roundsPlayed++;
 
             var computerMove = new Move();
             computerMove.GenerateRandom();
@@ -83,3 +82,4 @@ class Game
 
 //  3. В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move
 // 4.1 Game — игроков и количество раундов
+// 4.3 3. Если Move.IsValid() возвращает false (во время проверки в методе game.Play()), ход не засчитывается: ход компьютера не генерируется, счёт и номер раунда не изменяются.
