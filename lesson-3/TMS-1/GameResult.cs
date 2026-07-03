@@ -8,6 +8,7 @@ public class GameResult
         ComputerMove = computerMove;
         ResultText = resultText;
     }
+    
     public Move PlayerMove { get; private set; }
     public Move ComputerMove { get; private set; }
     public string ResultText { get; private set; } = string.Empty;

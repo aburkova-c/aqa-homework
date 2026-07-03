@@ -37,15 +37,12 @@ class Game
         Console.WriteLine("Enter your step:");
 
         UserWon = false;
-
         do
         {
             Console.WriteLine("1 - Rock");
             Console.WriteLine("2 - Paper");
             Console.WriteLine("3 - Scissors");
             Console.WriteLine("0 - Exit");
-
-
 
             var playerMove = new Move();
             playerMove.ReadFromConsole();
@@ -64,22 +61,37 @@ class Game
 
             var computerMove = new Move();
             computerMove.GenerateRandom();
-            Console.WriteLine($"You chose: {playerMove.Name}");
-            Console.WriteLine($"Computer chose: {computerMove.Name}");
 
-            if (computerMove.Number == playerMove.Number)
-            {
-            }
-            else if (playerMove.Number == 1 && computerMove.Number == 3 ||
-                     playerMove.Number == 2 && computerMove.Number == 1 ||
-                     playerMove.Number == 3 && computerMove.Number == 2)
-            {
-                UserWon = true;
-            }
+            var result = GetRoundResult(playerMove, computerMove);
+            result.Print();
+            
         } while (_roundsPlayed < RoundsToPlay);
     }
+    private GameResult GetRoundResult(Move playerMove, Move computerMove)
+    {
+        string resultText;
+        if (playerMove.Number == computerMove.Number)
+        {
+            resultText = "Draw!";
+        }
+        else if (playerMove.Number == 1 && computerMove.Number == 3 ||
+                 playerMove.Number == 2 && computerMove.Number == 1 ||
+                 playerMove.Number == 3 && computerMove.Number == 2)
+        {
+            resultText = "Player Won!";
+            _player.AddPoint();
+        }
+        else
+        {
+            resultText = "Computer Won!";
+            _computer.AddPoint();
+        }
+        return new GameResult(playerMove, computerMove, resultText);
+    }
+
 }
 
 //  3. В Game.Play() заменить числовые переменные ходов объектами Move; получать значения ходов через методы класса Move
 // 4.1 Game — игроков и количество раундов
-// 4.3 3. Если Move.IsValid() возвращает false (во время проверки в методе game.Play()), ход не засчитывается: ход компьютера не генерируется, счёт и номер раунда не изменяются.
+// 4.3 Если Move.IsValid() возвращает false (во время проверки в методе game.Play()), ход не засчитывается: ход компьютера не генерируется, счёт и номер раунда не изменяются.
+// 4.5 5. Добавить в Game отдельный метод, который принимает ходы игрока и компьютера, определяет результат раунда, начисляет очко победителю и возвращает GameResult.
