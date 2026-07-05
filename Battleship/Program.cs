@@ -70,21 +70,27 @@ class Board
 
     public bool IsInside(Position position)
     {
-        return position.X >= 0 && position.X < Rows && position.Y >= 0 && position.Y < Columns;
+        return position.X >= 0 && position.X < Rows &&
+               position.Y >= 0 && position.Y < Columns;
     }
 
     public bool HasShip(Position position)
     {
-        return position.Y == Ship.Position.Y && position.X >= Ship.Position.X &&
+        return position.Y == Ship.Position.Y &&
+               position.X >= Ship.Position.X &&
                position.X < Ship.Position.X + Ship.Length;
     }
 }
+    
+
 
 class Game
 {
     public void Play(Board board)
     {
+        var opponentBoard = GenerateOpponentBoard(board); 
         var roundCount = 0;
+        
         while (true)
         {
             roundCount++;
@@ -115,6 +121,14 @@ class Game
         }
     }
 
+    private Board GenerateOpponentBoard(Board playerBoard)
+    {
+        var shipPosition = new Position(0, 0);
+        var ship = new Ship(shipPosition, playerBoard.Ship.Length);
+            
+        return new Board(playerBoard.Rows, playerBoard.Columns, ship);
+    }
+    
     private bool TryReadFromConsole(string coordinateName, int roundCount, out int coordinate)
     {
         Console.WriteLine($"Input your {coordinateName} coordinate for round {roundCount}:");
