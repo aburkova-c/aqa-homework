@@ -3,24 +3,36 @@ class Program
     public static void Main()
     {
         var shipPosition = new Position(2, 1);
-        
-        var ship = new Ship(shipPosition, 2);
-        
+
+        var ship = new Ship(shipPosition, 2); //x123234
+
         var board = new Board(5, 5, ship);
 
         var game = new Game();
-        
+
         game.Play(board);
+
+
+
+        int a = 2;
+        int b = a; // взяли 2 из а и скопировали в b
+        a = 5;
+        //b = 2
+        
+        Position p = new  Position(1, 1);
+        Position p2 = p;
+
+        p.X = 2;
+        
+        //p2.X == 2
     }
 }
 
 
-
-
 class Position
 {
-    public int X { get; private set; }
-    public int Y { get; private set; }
+    public int X { get; set; }
+    public int Y { get; }
 
     public Position(int x, int y)
     {
@@ -32,9 +44,9 @@ class Position
 class Ship
 {
     // Координаты самой левой верней палубы
-    public Position Position { get; private set; }     
-    public int Length { get; private set; }     
-    
+    public Position Position { get; } //null
+    public int Length { get; } //12
+
     public Ship(Position position, int length)
     {
         Position = position;
@@ -44,10 +56,10 @@ class Ship
 
 class Board
 {
-    public int Rows { get; private set; }
-    public int Columns { get; private set; }
-    
-    public Ship Ship { get; private set; }
+    public int Rows { get; }
+    public int Columns { get; }
+
+    public Ship Ship { get; }
 
     public Board(int rows, int columns, Ship ship)
     {
@@ -63,7 +75,8 @@ class Board
 
     public bool HasShip(Position position)
     {
-        return position.Y == Ship.Position.Y && position.X >= Ship.Position.X && position.X < Ship.Position.X + Ship.Length;
+        return position.Y == Ship.Position.Y && position.X >= Ship.Position.X &&
+               position.X < Ship.Position.X + Ship.Length;
     }
 }
 
@@ -71,29 +84,19 @@ class Game
 {
     public void Play(Board board)
     {
+        var roundCount = 0;
         while (true)
         {
-            Position shotPosition;
-            
-            Console.WriteLine("X Coordinate:");
-            var xInput = Console.ReadLine();
-            if (!int.TryParse(xInput, out var xPosition))
-            {
-                Console.WriteLine("Invalid input");
+            roundCount++;
+            if (!TryReadFromConsole("X",  roundCount,  out var xPosition))
                 continue;
-            }
-            
+
             Console.WriteLine();
-            
-            Console.WriteLine("Y Coordinate:");
-            var yInput = Console.ReadLine();
-            if (!int.TryParse(yInput, out var yPosition))
-            {
-                Console.WriteLine("Invalid input");
+
+            if (!TryReadFromConsole("Y",  roundCount, out var yPosition))
                 continue;
-            }
-            
-            shotPosition = new  Position(xPosition, yPosition);
+
+            var shotPosition = new Position(xPosition, yPosition);
 
             if (!board.IsInside(shotPosition))
             {
@@ -110,6 +113,19 @@ class Game
                 Console.WriteLine("Miss!");
             }
         }
+    }
+
+    private bool TryReadFromConsole(string coordinateName, int roundCount, out int coordinate)
+    {
+        Console.WriteLine($"Input your {coordinateName} coordinate for round {roundCount}:");
+        var input = Console.ReadLine();
+        if (!int.TryParse(input, out coordinate))
+        {
+            Console.WriteLine("Invalid input");
+            return false;
+        }
+        
+        return true;
     }
 }
 
