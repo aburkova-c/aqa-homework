@@ -81,37 +81,37 @@ class Board
                position.X < Ship.Position.X + Ship.Length;
     }
 }
-    
+
 
 
 class Game
 {
     public void Play(Board board)
     {
-        var opponentBoard = GenerateOpponentBoard(board); 
+        var opponentBoard = GenerateOpponentBoard(board);
         var random = new Random();
         var roundCount = 0;
-        
-       while (true)
+
+        while (true)
         {
             roundCount++;
-            if (!TryReadFromConsole("X",  roundCount,  out var xPosition))
+            if (!TryReadFromConsole("X", roundCount, out var xPosition))
                 continue;
 
             Console.WriteLine();
 
-            if (!TryReadFromConsole("Y",  roundCount, out var yPosition))
+            if (!TryReadFromConsole("Y", roundCount, out var yPosition))
                 continue;
 
-            var shotPosition = new Position(xPosition, yPosition);
+            var shootPosition = new Position(xPosition, yPosition);
 
-            if (!opponentBoard.IsInside(shotPosition))
+            if (!opponentBoard.IsInside(shootPosition))
             {
-                Console.WriteLine("Invalid shot position!");
+                Console.WriteLine("Invalid shoot position!");
                 continue;
             }
 
-            if (board.HasShip(shotPosition))
+            if (opponentBoard.HasShip(shootPosition))
             {
                 Console.WriteLine("You Hit!");
             }
@@ -122,17 +122,17 @@ class Game
 
             var computerX = random.Next(0, board.Rows);
             var computerY = random.Next(0, board.Columns);
-            var computerShotPosition = new Position(computerX, computerY);
-            
-            Console.WriteLine($"Computer shots at X = {computerShotPosition.X}, Y = {computerShotPosition.Y}");
-            
-            if (opponentBoard.HasShip(shotPosition))
+            var computerShootPosition = new Position(computerX, computerY);
+
+            Console.WriteLine($"Computer shoots at X = {computerShootPosition.X}, Y = {computerShootPosition.Y}");
+
+            if (board.HasShip(computerShootPosition))
             {
                 Console.WriteLine("Computer Hit!");
             }
             else
             {
-                Console.WriteLine("Compuetr Missed!");
+                Console.WriteLine("Computer Missed!");
             }
         }
     }
@@ -140,18 +140,20 @@ class Game
     private Board GenerateOpponentBoard(Board playerBoard)
     {
         var random = new Random();
-        var shipLength = random.Next(1, playerBoard.Rows +1);
-        
+        var shipLength = random.Next(1, playerBoard.Rows + 1);
+
         var x = random.Next(0, playerBoard.Rows - shipLength + 1);
         var y = random.Next(0, playerBoard.Columns);
-        
+
         var shipPosition = new Position(x, y);
         var ship = new Ship(shipPosition, shipLength);
-            
+
         return new Board(playerBoard.Rows, playerBoard.Columns, ship);
+
     }
-    
-    private bool TryReadFromConsole(string coordinateName, int roundCount, out int coordinate)
+
+
+private bool TryReadFromConsole(string coordinateName, int roundCount, out int coordinate)
     {
         Console.WriteLine($"Input your {coordinateName} coordinate for round {roundCount}:");
         var input = Console.ReadLine();
