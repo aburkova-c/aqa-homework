@@ -36,27 +36,21 @@ class Game
         Console.WriteLine("This is Rock Paper Scissors.");
         Console.WriteLine("Enter your step:");
 
-        UserWon = false;
-        do
+        while (_roundsToPlay > _roundsPlayed)
         {
             Console.WriteLine("1 - Rock");
             Console.WriteLine("2 - Paper");
             Console.WriteLine("3 - Scissors");
-            Console.WriteLine("0 - Exit");
 
             var playerMove = new Move();
             playerMove.ReadFromConsole();
-
-            if (playerMove.Number == 0)
-            {
-                return;
-            }
-
+            
             if (!playerMove.IsValid())
             {
                 Console.WriteLine($"Invalid move: {playerMove.Number}");
                 continue;
             }
+            
             _roundsPlayed++;
 
             var computerMove = new Move();
@@ -64,9 +58,9 @@ class Game
 
             var result = GetRoundResult(playerMove, computerMove);
             result.Print(_roundsPlayed);
-            
-        } while (_roundsPlayed < RoundsToPlay);
+        }
     }
+
     private GameResult GetRoundResult(Move playerMove, Move computerMove)
     {
         string resultText;
@@ -95,3 +89,4 @@ class Game
 // 4.1 Game — игроков и количество раундов
 // 4.3 Если Move.IsValid() возвращает false (во время проверки в методе game.Play()), ход не засчитывается: ход компьютера не генерируется, счёт и номер раунда не изменяются.
 // 4.5 Добавить в Game отдельный метод, который принимает ходы игрока и компьютера, определяет результат раунда, начисляет очко победителю и возвращает GameResult.
+// 4.7 Изменить метод Game.Play(), который запускает игру на заданное количество раундов, переданное в конструктор. Ход игрока получать через ReadFromConsole(), ход компьютера — через GenerateRandom(). И убрали поддержку 0
