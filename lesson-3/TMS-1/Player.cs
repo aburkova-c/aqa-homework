@@ -2,7 +2,12 @@
 
 public class Player
 {
-    public string Name { get; set; }
+    public Player(string name)
+    {
+        Name = name;
+    }
+    
+    public string Name { get; private set; }
     public int Score { get; private set; }
 
     public void AddPoint()
@@ -19,3 +24,4 @@ public class Player
 
 // Описать класс игрока Player со свойствами Name и Score.
 // Добавить методы AddPoint() для увеличения счёта и ResetScore() для обнуления.  
+// 4.1 Добавить конструкторы: Player должен принимать имя
