@@ -29,7 +29,29 @@ class Game
     public bool UserWon { get; private set; }
 
     public bool ComputerWon { get; private set; }
+    private void PrintCurrentScore()
+    {
+        Console.WriteLine($"Score: {_player.Name}: {_player.Score} - {_computer.Name}: {_computer.Score}");
+    }
 
+    private void PrintFinalResult()
+    {
+        Console.WriteLine("Final score:");
+        PrintCurrentScore();
+
+        if (_player.Score > _computer.Score)
+        {
+            Console.WriteLine($"Winner: {_player.Name} 🥳");
+        }
+        else if (_computer.Score > _player.Score)
+        {
+            Console.WriteLine($"Winner: {_computer.Name} 🤖");
+        }
+        else
+        {
+            Console.WriteLine("Draw!");
+        }
+    }
 
     public void Play()
     {
@@ -58,8 +80,14 @@ class Game
 
             var result = GetRoundResult(playerMove, computerMove);
             result.Print(_roundsPlayed);
+            PrintCurrentScore();
         }
+
+        PrintFinalResult();
+
     }
+
+   
 
     private GameResult GetRoundResult(Move playerMove, Move computerMove)
     {
@@ -90,3 +118,4 @@ class Game
 // 4.3 Если Move.IsValid() возвращает false (во время проверки в методе game.Play()), ход не засчитывается: ход компьютера не генерируется, счёт и номер раунда не изменяются.
 // 4.5 Добавить в Game отдельный метод, который принимает ходы игрока и компьютера, определяет результат раунда, начисляет очко победителю и возвращает GameResult.
 // 4.7 Изменить метод Game.Play(), который запускает игру на заданное количество раундов, переданное в конструктор. Ход игрока получать через ReadFromConsole(), ход компьютера — через GenerateRandom(). И убрали поддержку 0
+// 4.8 8. После каждого раунда выводить его номер, оба хода, результат и текущий счёт. После последнего раунда вывести итоговый счёт и имя победителя либо сообщение о ничьей.
