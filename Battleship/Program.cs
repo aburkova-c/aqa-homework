@@ -123,8 +123,14 @@ class Game
 
     private Board GenerateOpponentBoard(Board playerBoard)
     {
-        var shipPosition = new Position(0, 0);
-        var ship = new Ship(shipPosition, playerBoard.Ship.Length);
+        var random = new Random();
+        var shipLength = random.Next(1, playerBoard.Rows +1);
+        
+        var x = random.Next(0, playerBoard.Rows - shipLength + 1);
+        var y = random.Next(0, playerBoard.Columns);
+        
+        var shipPosition = new Position(x, y);
+        var ship = new Ship(shipPosition, shipLength);
             
         return new Board(playerBoard.Rows, playerBoard.Columns, ship);
     }
@@ -158,3 +164,6 @@ class Game
 // X X X X X 
 // X X X X X 
 // Y
+
+// 5.1. В методе Play до начала игрового цикла создать через метод GenerateOpponentBoard доску компьютера размером с доску пользователя и сохранить её в локальную переменную.
+// 5.2 В методе GenerateOpponentBoard с помощью класса Random сгенерировать длину и позицию корабля так, чтобы он полностью находился внутри игрового поля.
