@@ -89,9 +89,10 @@ class Game
     public void Play(Board board)
     {
         var opponentBoard = GenerateOpponentBoard(board); 
+        var random = new Random();
         var roundCount = 0;
         
-        while (true)
+       while (true)
         {
             roundCount++;
             if (!TryReadFromConsole("X",  roundCount,  out var xPosition))
@@ -104,7 +105,7 @@ class Game
 
             var shotPosition = new Position(xPosition, yPosition);
 
-            if (!board.IsInside(shotPosition))
+            if (!opponentBoard.IsInside(shotPosition))
             {
                 Console.WriteLine("Invalid shot position!");
                 continue;
@@ -112,11 +113,26 @@ class Game
 
             if (board.HasShip(shotPosition))
             {
-                Console.WriteLine("Hit!");
+                Console.WriteLine("You Hit!");
             }
             else
             {
-                Console.WriteLine("Miss!");
+                Console.WriteLine("You Missed!");
+            }
+
+            var computerX = random.Next(0, board.Rows);
+            var computerY = random.Next(0, board.Columns);
+            var computerShotPosition = new Position(computerX, computerY);
+            
+            Console.WriteLine($"Computer shots at X = {computerShotPosition.X}, Y = {computerShotPosition.Y}");
+            
+            if (opponentBoard.HasShip(shotPosition))
+            {
+                Console.WriteLine("Computer Hit!");
+            }
+            else
+            {
+                Console.WriteLine("Compuetr Missed!");
             }
         }
     }
@@ -167,3 +183,4 @@ class Game
 
 // 5.1. В методе Play до начала игрового цикла создать через метод GenerateOpponentBoard доску компьютера размером с доску пользователя и сохранить её в локальную переменную.
 // 5.2 В методе GenerateOpponentBoard с помощью класса Random сгенерировать длину и позицию корабля так, чтобы он полностью находился внутри игрового поля.
+// 5.3 После выстрела пользователя с помощью класса Random сгенерировать координаты X и Y хода компьютера в пределах доски пользователя и определить результат выстрела компьютера.
