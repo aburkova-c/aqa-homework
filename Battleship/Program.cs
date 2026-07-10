@@ -2,27 +2,19 @@ class Program
 {
     public static void Main()
     {
-        var shipPosition = new Position(2, 1);
-
-        var ship = new Ship(shipPosition, 2); //x123234
-
-        var board = new Board(5, 5, ship);
-
-        var game = new Game();
-
-        game.Play(board);
-
-
-
-        int a = 2;
-        int b = a; // взяли 2 из а и скопировали в b
-        a = 5;
-        //b = 2
+        try
+        {
+            var shipPosition = new Position(2, 1);
+            var ship = new Ship(shipPosition, 2); //x123234
+            var board = new Board(5, 5, ship);
+            var game = new Game();
+            game.Play(board);
+        }
         
-        Position p = new  Position(1, 1);
-        Position p2 = p;
-
-        p.X = 2;
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        } 
 
         try
         {
@@ -133,8 +125,17 @@ class Game
             if (!TryReadFromConsole("Y", roundCount, out var yPosition))
                 continue;
 
-            var shootPosition = new Position(xPosition, yPosition);
-
+            Position shootPosition;
+            try
+            {
+                shootPosition = new Position(xPosition, yPosition);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                continue;
+            }
+            
             if (!opponentBoard.IsInside(shootPosition))
             {
                 Console.WriteLine("Invalid shoot position!");
