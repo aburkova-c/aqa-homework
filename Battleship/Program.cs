@@ -58,7 +58,6 @@ class Board
 {
     public int Rows { get; }
     public int Columns { get; }
-
     public Ship Ship { get; }
 
     public Board(int rows, int columns, Ship ship)
@@ -86,6 +85,8 @@ class Board
 
 class Game
 {
+    public int UserHitCount { get; private set; }
+    public int ComputerHitCount { get; private set; }
     public void Play(Board board)
     {
         var opponentBoard = GenerateOpponentBoard(board);
@@ -114,6 +115,7 @@ class Game
             if (opponentBoard.HasShip(shootPosition))
             {
                 Console.WriteLine("You Hit!");
+                UserHitCount++;
             }
             else
             {
@@ -129,6 +131,7 @@ class Game
             if (board.HasShip(computerShootPosition))
             {
                 Console.WriteLine("Computer Hit!");
+                ComputerHitCount++;
             }
             else
             {
