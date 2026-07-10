@@ -132,10 +132,14 @@ class Game
     public int UserHitCount { get; private set; }
     public int ComputerHitCount { get; private set; }
 
+    public List<Shot> Shots { get; } = new List<Shot>(); 
+
     private Shot MakeShot(Board board, Position position)
     {
         var hitShip = board.FindShip(position);
-        return new Shot(position, board, hitShip);
+        var shot = new Shot(position, board, hitShip);
+        Shots.Add(shot);
+        return shot;
     }
 
 public void Play(Board board)
