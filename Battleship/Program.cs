@@ -137,6 +137,7 @@ class Game
             {
                 Console.WriteLine("Computer Missed!");
             }
+            Console.WriteLine($"Score: User = {UserHitCount}, Computer = {ComputerHitCount}");
         }
     }
 
