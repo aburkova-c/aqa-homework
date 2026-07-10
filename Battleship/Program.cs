@@ -100,6 +100,13 @@ class Board
                position.X >= Ship.Position.X &&
                position.X < Ship.Position.X + Ship.Length;
     }
+
+    public Ship? FindShip(Position position)
+    {
+        if (HasShip(position))
+            return Ship;
+        return null;
+    }
 }
 
 class Shot
