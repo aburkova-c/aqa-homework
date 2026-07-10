@@ -131,12 +131,20 @@ class Game
 {
     public int UserHitCount { get; private set; }
     public int ComputerHitCount { get; private set; }
-    public void Play(Board board)
+
+    private Shot MakeShot(Board board, Position position)
+    {
+        var hitShip = board.FindShip(position);
+        return new Shot(position, board, hitShip);
+    }
+
+public void Play(Board board)
     {
         var opponentBoard = GenerateOpponentBoard(board);
         var random = new Random();
         var roundCount = 0;
 
+       
         while (true)
         {
             roundCount++;
@@ -165,14 +173,15 @@ class Game
                 continue;
             }
 
-            if (opponentBoard.HasShip(shootPosition))
+            var userShot = MakeShot(opponentBoard, shootPosition);
+            if (userShot.Ship is null)
             {
-                Console.WriteLine("You Hit!");
-                UserHitCount++;
+                Console.WriteLine("You Missed!");
             }
             else
             {
-                Console.WriteLine("You Missed!");
+                Console.WriteLine("You Hit!");
+                UserHitCount++;
             }
 
             var computerX = random.Next(0, board.Rows);
@@ -181,15 +190,18 @@ class Game
 
             Console.WriteLine($"Computer shoots at X = {computerShootPosition.X}, Y = {computerShootPosition.Y}");
 
-            if (board.HasShip(computerShootPosition))
+            var computerShot = MakeShot(board, computerShootPosition);
+            
+            if (computerShot.Ship is null)
+            {
+                Console.WriteLine("Computer Missed!");
+            }
+            else
             {
                 Console.WriteLine("Computer Hit!");
                 ComputerHitCount++;
             }
-            else
-            {
-                Console.WriteLine("Computer Missed!");
-            }
+            
             Console.WriteLine($"Score: User = {UserHitCount}, Computer = {ComputerHitCount}");
         }
         
@@ -241,8 +253,3 @@ private bool TryReadFromConsole(string coordinateName, int roundCount, out int c
 // X X X X X 
 // X X X X X 
 // X X X X X 
-// Y
-
-// 5.1. В методе Play до начала игрового цикла создать через метод GenerateOpponentBoard доску компьютера размером с доску пользователя и сохранить её в локальную переменную.
-// 5.2 В методе GenerateOpponentBoard с помощью класса Random сгенерировать длину и позицию корабля так, чтобы он полностью находился внутри игрового поля.
-// 5.3 После выстрела пользователя с помощью класса Random сгенерировать координаты X и Y хода компьютера в пределах доски пользователя и определить результат выстрела компьютера.
