@@ -102,7 +102,23 @@ class Board
     }
 }
 
+class Shot
+{
+    public Position Position { get; }
+    public Board Board { get; }
+    public Ship? Ship { get; }
 
+    public Shot(Position position, Board board, Ship? ship)
+    {
+        if (board == null)
+            throw new ArgumentNullException(nameof(board));
+        if (position == null)
+            throw new ArgumentNullException(nameof(position));
+        Position = position;
+        Board = board;
+        Ship = ship;
+    }
+}
 
 class Game
 {
@@ -200,6 +216,8 @@ private bool TryReadFromConsole(string coordinateName, int roundCount, out int c
         
         return true;
     }
+
+
 }
 
 // Ship
