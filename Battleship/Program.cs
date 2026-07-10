@@ -23,8 +23,15 @@ class Program
         Position p2 = p;
 
         p.X = 2;
-        
-        //p2.X == 2
+
+        try
+        {
+            var badShip = new Ship(new Position(0, 0), -1);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Console.WriteLine($"Ok, here is the test-error message: {e.Message}");
+        }
     }
 }
 
@@ -36,6 +43,10 @@ class Position
 
     public Position(int x, int y)
     {
+        if (x < 0)
+            throw new ArgumentOutOfRangeException(nameof(x), x, "X cannot be negative");
+        if (y < 0)
+            throw new ArgumentOutOfRangeException(nameof(y), y, "Y cannot be negative");
         X = x;
         Y = y;
     }
@@ -49,6 +60,11 @@ class Ship
 
     public Ship(Position position, int length)
     {
+        if (position == null)
+            throw new ArgumentNullException(nameof(position));
+        if (length <= 0)
+            throw new ArgumentOutOfRangeException(nameof(length), length, "Ship length must be positive");
+        
         Position = position;
         Length = length;
     }
@@ -62,9 +78,22 @@ class Board
 
     public Board(int rows, int columns, Ship ship)
     {
+       if (rows <= 0)
+           throw new ArgumentOutOfRangeException(nameof(rows), rows, "Board rows count must be positive.");
+       if (columns <= 0)
+           throw new ArgumentOutOfRangeException(nameof(columns), columns, "Board columns count must be positive.");
+       if  (ship == null)
+           throw new ArgumentNullException(nameof(ship));
+       
         Rows = rows;
         Columns = columns;
         Ship = ship;
+        
+        var shipStart = ship.Position;
+        var shipEnd = new Position(ship.Position.X + ship.Length - 1, ship.Position.Y);
+        
+        if (!IsInside(shipStart) || !IsInside(shipEnd))
+            throw new ArgumentException("Ship must be inside the board!");
     }
 
     public bool IsInside(Position position)
@@ -139,6 +168,7 @@ class Game
             }
             Console.WriteLine($"Score: User = {UserHitCount}, Computer = {ComputerHitCount}");
         }
+        
     }
 
     private Board GenerateOpponentBoard(Board playerBoard)
