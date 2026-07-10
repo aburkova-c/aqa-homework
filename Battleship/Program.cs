@@ -3,24 +3,36 @@ class Program
     public static void Main()
     {
         var shipPosition = new Position(2, 1);
-        
-        var ship = new Ship(shipPosition, 2);
-        
+
+        var ship = new Ship(shipPosition, 2); //x123234
+
         var board = new Board(5, 5, ship);
 
         var game = new Game();
-        
+
         game.Play(board);
+
+
+
+        int a = 2;
+        int b = a; // взяли 2 из а и скопировали в b
+        a = 5;
+        //b = 2
+        
+        Position p = new  Position(1, 1);
+        Position p2 = p;
+
+        p.X = 2;
+        
+        //p2.X == 2
     }
 }
 
 
-
-
 class Position
 {
-    public int X { get; private set; }
-    public int Y { get; private set; }
+    public int X { get; set; }
+    public int Y { get; }
 
     public Position(int x, int y)
     {
@@ -32,9 +44,9 @@ class Position
 class Ship
 {
     // Координаты самой левой верней палубы
-    public Position Position { get; private set; }     
-    public int Length { get; private set; }     
-    
+    public Position Position { get; } //null
+    public int Length { get; } //12
+
     public Ship(Position position, int length)
     {
         Position = position;
@@ -44,10 +56,9 @@ class Ship
 
 class Board
 {
-    public int Rows { get; private set; }
-    public int Columns { get; private set; }
-    
-    public Ship Ship { get; private set; }
+    public int Rows { get; }
+    public int Columns { get; }
+    public Ship Ship { get; }
 
     public Board(int rows, int columns, Ship ship)
     {
@@ -58,58 +69,105 @@ class Board
 
     public bool IsInside(Position position)
     {
-        return position.X >= 0 && position.X < Rows && position.Y >= 0 && position.Y < Columns;
+        return position.X >= 0 && position.X < Rows &&
+               position.Y >= 0 && position.Y < Columns;
     }
 
     public bool HasShip(Position position)
     {
-        return position.Y == Ship.Position.Y && position.X >= Ship.Position.X && position.X < Ship.Position.X + Ship.Length;
+        return position.Y == Ship.Position.Y &&
+               position.X >= Ship.Position.X &&
+               position.X < Ship.Position.X + Ship.Length;
     }
 }
 
+
+
 class Game
 {
+    public int UserHitCount { get; private set; }
+    public int ComputerHitCount { get; private set; }
     public void Play(Board board)
     {
+        var opponentBoard = GenerateOpponentBoard(board);
+        var random = new Random();
+        var roundCount = 0;
+
         while (true)
         {
-            Position shotPosition;
-            
-            Console.WriteLine("X Coordinate:");
-            var xInput = Console.ReadLine();
-            if (!int.TryParse(xInput, out var xPosition))
-            {
-                Console.WriteLine("Invalid input");
+            roundCount++;
+            if (!TryReadFromConsole("X", roundCount, out var xPosition))
                 continue;
-            }
-            
+
             Console.WriteLine();
-            
-            Console.WriteLine("Y Coordinate:");
-            var yInput = Console.ReadLine();
-            if (!int.TryParse(yInput, out var yPosition))
-            {
-                Console.WriteLine("Invalid input");
-                continue;
-            }
-            
-            shotPosition = new  Position(xPosition, yPosition);
 
-            if (!board.IsInside(shotPosition))
+            if (!TryReadFromConsole("Y", roundCount, out var yPosition))
+                continue;
+
+            var shootPosition = new Position(xPosition, yPosition);
+
+            if (!opponentBoard.IsInside(shootPosition))
             {
-                Console.WriteLine("Invalid shot position!");
+                Console.WriteLine("Invalid shoot position!");
                 continue;
             }
 
-            if (board.HasShip(shotPosition))
+            if (opponentBoard.HasShip(shootPosition))
             {
-                Console.WriteLine("Hit!");
+                Console.WriteLine("You Hit!");
+                UserHitCount++;
             }
             else
             {
-                Console.WriteLine("Miss!");
+                Console.WriteLine("You Missed!");
             }
+
+            var computerX = random.Next(0, board.Rows);
+            var computerY = random.Next(0, board.Columns);
+            var computerShootPosition = new Position(computerX, computerY);
+
+            Console.WriteLine($"Computer shoots at X = {computerShootPosition.X}, Y = {computerShootPosition.Y}");
+
+            if (board.HasShip(computerShootPosition))
+            {
+                Console.WriteLine("Computer Hit!");
+                ComputerHitCount++;
+            }
+            else
+            {
+                Console.WriteLine("Computer Missed!");
+            }
+            Console.WriteLine($"Score: User = {UserHitCount}, Computer = {ComputerHitCount}");
         }
+    }
+
+    private Board GenerateOpponentBoard(Board playerBoard)
+    {
+        var random = new Random();
+        var shipLength = random.Next(1, playerBoard.Rows + 1);
+
+        var x = random.Next(0, playerBoard.Rows - shipLength + 1);
+        var y = random.Next(0, playerBoard.Columns);
+
+        var shipPosition = new Position(x, y);
+        var ship = new Ship(shipPosition, shipLength);
+
+        return new Board(playerBoard.Rows, playerBoard.Columns, ship);
+
+    }
+
+
+private bool TryReadFromConsole(string coordinateName, int roundCount, out int coordinate)
+    {
+        Console.WriteLine($"Input your {coordinateName} coordinate for round {roundCount}:");
+        var input = Console.ReadLine();
+        if (!int.TryParse(input, out coordinate))
+        {
+            Console.WriteLine("Invalid input");
+            return false;
+        }
+        
+        return true;
     }
 }
 
@@ -128,3 +186,7 @@ class Game
 // X X X X X 
 // X X X X X 
 // Y
+
+// 5.1. В методе Play до начала игрового цикла создать через метод GenerateOpponentBoard доску компьютера размером с доску пользователя и сохранить её в локальную переменную.
+// 5.2 В методе GenerateOpponentBoard с помощью класса Random сгенерировать длину и позицию корабля так, чтобы он полностью находился внутри игрового поля.
+// 5.3 После выстрела пользователя с помощью класса Random сгенерировать координаты X и Y хода компьютера в пределах доски пользователя и определить результат выстрела компьютера.
