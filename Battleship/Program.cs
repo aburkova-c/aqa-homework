@@ -134,8 +134,14 @@ class Game
 
     public List<Shot> Shots { get; } = new List<Shot>(); 
 
-    private Shot MakeShot(Board board, Position position)
+    private Shot MakeShot(Board board, Position position)   
     {
+        var alreadyShot = Shots.Any(s => s.Board == board && s.Position.X == position.X && s.Position.Y  
+            == position.Y);                             
+        if (alreadyShot)
+        {
+            throw new InvalidOperationException("Already shot a shot!");
+        }
         var hitShip = board.FindShip(position);
         var shot = new Shot(position, board, hitShip);
         Shots.Add(shot);
@@ -148,7 +154,7 @@ public void Play(Board board)
         var random = new Random();
         var roundCount = 0;
 
-       
+
         while (true)
         {
             roundCount++;
@@ -170,27 +176,48 @@ public void Play(Board board)
                 Console.WriteLine(e.Message);
                 continue;
             }
-            
+
             if (!opponentBoard.IsInside(shootPosition))
             {
                 Console.WriteLine("Invalid shoot position!");
                 continue;
             }
 
-            var userShot = MakeShot(opponentBoard, shootPosition);
+            Shot userShot;
+            try
+            {
+                userShot = MakeShot(opponentBoard, shootPosition);
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+                continue;
+            }
+            Console.WriteLine($"User: {userShot.Position.X}, Y: {userShot.Position.Y}");
+            
             if (userShot.Ship is null)
             {
-                Console.WriteLine("You Missed!");
+                Console.WriteLine("User missed!");
             }
             else
             {
-                Console.WriteLine("You Hit!");
+                Console.WriteLine("User Hit!");
                 UserHitCount++;
             }
 
             var computerX = random.Next(0, board.Rows);
             var computerY = random.Next(0, board.Columns);
-            var computerShootPosition = new Position(computerX, computerY);
+
+            Position computerShootPosition;
+            try
+            {
+                computerShootPosition = new Position(computerX, computerY);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                continue;
+            }
 
             Console.WriteLine($"Computer shoots at X = {computerShootPosition.X}, Y = {computerShootPosition.Y}");
 
