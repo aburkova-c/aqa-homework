@@ -132,16 +132,20 @@ class Game
     public int UserHitCount { get; private set; }
     public int ComputerHitCount { get; private set; }
 
-    public List<Shot> Shots { get; } = new List<Shot>(); 
+    public List<Shot> Shots { get; } = new List<Shot>();
 
+    private bool AlreadyShot(Board board, Position position)
+    {
+        return Shots.Any(shot => shot.Board == board && shot.Position.X == position.X && shot.Position.Y == position.Y);
+    }
+   
     private Shot MakeShot(Board board, Position position)   
     {
-        var alreadyShot = Shots.Any(s => s.Board == board && s.Position.X == position.X && s.Position.Y  
-            == position.Y);                             
-        if (alreadyShot)
+        if (AlreadyShot(board, position))
         {
             throw new InvalidOperationException("Already shot a shot!");
-        }
+        }  
+        
         var hitShip = board.FindShip(position);
         var shot = new Shot(position, board, hitShip);
         Shots.Add(shot);
@@ -205,19 +209,14 @@ public void Play(Board board)
                 UserHitCount++;
             }
 
-            var computerX = random.Next(0, board.Rows);
-            var computerY = random.Next(0, board.Columns);
-
             Position computerShootPosition;
-            try
+            do
             {
+                var computerX = random.Next(0, board.Rows);
+                var computerY = random.Next(0, board.Columns);
                 computerShootPosition = new Position(computerX, computerY);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Console.WriteLine(e.Message);
-                continue;
-            }
+            } while (
+                AlreadyShot(board, computerShootPosition));
 
             Console.WriteLine($"Computer shoots at X = {computerShootPosition.X}, Y = {computerShootPosition.Y}");
 
@@ -234,6 +233,30 @@ public void Play(Board board)
             }
             
             Console.WriteLine($"Score: User = {UserHitCount}, Computer = {ComputerHitCount}");
+            
+            var groupsByBoard = Shots.GroupBy(s => s.Board);
+            foreach (var group in  groupsByBoard)
+            {
+                var totalShots = group.Count();
+                var hits = group.Count(s => s.Ship != null);
+                var boardName = group.Key == board ? "playerBoard" : "computerBoard"  ;
+                var missedhits = group.Count(s => s.Ship == null);
+                var ifMissOnce = group.Any(s => s.Ship == null);
+                var firstAccessShoot = group.FirstOrDefault(s => s.Ship != null);
+                var listOfAllHits = group.Where(s => s.Ship != null).Select(s => s.Position );
+                if (firstAccessShoot == null)
+                {
+                    Console.WriteLine("We are waiting for your access shoot!");
+                }
+                else
+                {
+                    Console.WriteLine($"First access Shoot: X = {firstAccessShoot.Position.X}, Y = {firstAccessShoot.Position.Y}");
+                }
+
+                var hitsCoordinatesText = string.Join(", ", listOfAllHits.Select(p => $"({p.X},{p.Y})"));  
+                Console.WriteLine(
+                    $"Statistics: Total Shoots: {totalShots},  Hits: {hits}, MissedHits: {missedhits}, Board Name: {boardName}, Missed once: {ifMissOnce}, All hits: {hitsCoordinatesText}");
+            }
         }
         
     }
