@@ -16,6 +16,7 @@ abstract class Ship
     }
 
     public abstract bool IsOnPosition(Position position);
+    public abstract bool IntersectsWith(Ship otherShip);
     public abstract Position EndPosition { get; }
     
     public void RegisterHit(Position position)                                                                                            

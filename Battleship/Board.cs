@@ -18,11 +18,20 @@ class Board
         Rows = rows;
         Columns = columns;
         Ships = ships;
-
+        
         foreach (var ship in ships)
         {
             if (!IsInside(ship.Position) || !IsInside(ship.EndPosition))
                 throw new ArgumentException("Ship must be inside the board!");
+        }
+
+        for (var i = 0; i < ships.Length; i++)
+        {
+            for (var j = i + 1; j < ships.Length; j++)
+            {
+                if (ships[i].IntersectsWith(ships[j]))
+                    throw new ArgumentException("Ships must not intersect!");
+            }
         }
     }
 
